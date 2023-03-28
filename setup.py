@@ -12,7 +12,7 @@ setuptools.setup(
     description="Keycloak authentication for python projects",
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
-    url="https://github.com/SamhammerAG/sag-py-auth",
+    url="https://github.com/SamhammerAG/sag_py_auth",
     author="Samhammer AG",
     author_email="support@samhammer.de",
     license="MIT",
@@ -34,8 +34,8 @@ setuptools.setup(
         "dev": ["pytest"]
     },
     project_urls={
-        "Documentation": "https://github.com/SamhammerAG/sag-py-auth",
-        "Bug Reports": "https://github.com/SamhammerAG/sag-py-auth/issues",
-        "Source": "https://github.com/SamhammerAG/sag-py-auth"
+        "Documentation": "https://github.com/SamhammerAG/sag_py_auth",
+        "Bug Reports": "https://github.com/SamhammerAG/sag_py_auth/issues",
+        "Source": "https://github.com/SamhammerAG/sag_py_auth"
     }
 )
