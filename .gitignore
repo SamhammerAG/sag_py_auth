@@ -25,6 +25,9 @@ out/
 # pytest
 .pytest_cache
 .cache
+.coverage
+htmlcov/
+coverage.xml
 
 # Logs
 pip-log.txt

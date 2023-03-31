@@ -1,33 +1,28 @@
-from fastapi import HTTPException
+from typing import Dict, List
+
 import pytest
+from fastapi import HTTPException
+
 from sag_py_auth.jwt_auth import JwtAuth
-from sag_py_auth.models import AuthConfig, TokenRole
+from sag_py_auth.models import AuthConfig, Token, TokenRole
+
 from .helpers import get_token
 
 
-def test__verify_roles__has_multiple():
+def test__verify_roles__has_multiple() -> None:
     # Arrange
     jwt_auth = JwtAuth(
         AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne"),
         [TokenRole("clientOne", "clientOneRoleOne"), TokenRole("clientTwo", "clientTwoRoleTwo")],
-        None)
+        None,
+    )
 
-    resource_access = {
-        "clientOne": {
-            "roles": [
-                "clientOneRoleOne",
-                "clientOneRoleTwo"
-            ]
-        },
-        "clientTwo": {
-            "roles": [
-                "clientTwoRoleOne",
-                "clientTwoRoleTwo"
-            ]
-        }
+    resource_access: Dict[str, Dict[str, List[str]]] = {
+        "clientOne": {"roles": ["clientOneRoleOne", "clientOneRoleTwo"]},
+        "clientTwo": {"roles": ["clientTwoRoleOne", "clientTwoRoleTwo"]},
     }
 
-    token = get_token(None, resource_access)
+    token: Token = get_token(None, resource_access)
 
     # Act
     try:
@@ -36,29 +31,16 @@ def test__verify_roles__has_multiple():
         pytest.fail("No exception expected if the user has all roles")
 
 
-def test__verify_roles__requires_none():
+def test__verify_roles__requires_none() -> None:
     # Arrange
-    jwt_auth = JwtAuth(
-        AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne"),
-        None,
-        None)
+    jwt_auth = JwtAuth(AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne"), None, None)
 
-    resource_access = {
-        "clientOne": {
-            "roles": [
-                "clientOneRoleOne",
-                "clientOneRoleTwo"
-            ]
-        },
-        "clientTwo": {
-            "roles": [
-                "clientTwoRoleOne",
-                "clientTwoRoleTwo"
-            ]
-        }
+    resource_access: Dict[str, Dict[str, List[str]]] = {
+        "clientOne": {"roles": ["clientOneRoleOne", "clientOneRoleTwo"]},
+        "clientTwo": {"roles": ["clientTwoRoleOne", "clientTwoRoleTwo"]},
     }
 
-    token = get_token(None, resource_access)
+    token: Token = get_token(None, resource_access)
 
     # Act
     try:
@@ -67,29 +49,16 @@ def test__verify_roles__requires_none():
         pytest.fail("No exception expected if the user requires no roles")
 
 
-def test__verify_roles__requires_empty():
+def test__verify_roles__requires_empty() -> None:
     # Arrange
-    jwt_auth = JwtAuth(
-        AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne"),
-        [],
-        None)
+    jwt_auth = JwtAuth(AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne"), [], None)
 
-    resource_access = {
-        "clientOne": {
-            "roles": [
-                "clientOneRoleOne",
-                "clientOneRoleTwo"
-            ]
-        },
-        "clientTwo": {
-            "roles": [
-                "clientTwoRoleOne",
-                "clientTwoRoleTwo"
-            ]
-        }
+    resource_access: Dict[str, Dict[str, List[str]]] = {
+        "clientOne": {"roles": ["clientOneRoleOne", "clientOneRoleTwo"]},
+        "clientTwo": {"roles": ["clientTwoRoleOne", "clientTwoRoleTwo"]},
     }
 
-    token = get_token(None, resource_access)
+    token: Token = get_token(None, resource_access)
 
     # Act
     try:
@@ -98,34 +67,25 @@ def test__verify_roles__requires_empty():
         pytest.fail("No exception expected if the user requires no roles")
 
 
-def test__verify_roles__missing_role_of_existing_client():
+def test__verify_roles__missing_role_of_existing_client() -> None:
     with pytest.raises(HTTPException) as exception:
-
         # Arrange
         jwt_auth = JwtAuth(
             AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne"),
             [
                 TokenRole("clientOne", "clientOneRoleOne"),
                 TokenRole("clientTwo", "clientTwoRoleTwo"),
-                TokenRole("clientTwo", "missingRole")],
-            None)
+                TokenRole("clientTwo", "missingRole"),
+            ],
+            None,
+        )
 
-        resource_access = {
-            "clientOne": {
-                "roles": [
-                    "clientOneRoleOne",
-                    "clientOneRoleTwo"
-                ]
-            },
-            "clientTwo": {
-                "roles": [
-                    "clientTwoRoleOne",
-                    "clientTwoRoleTwo"
-                ]
-            }
+        resource_access: Dict[str, Dict[str, List[str]]] = {
+            "clientOne": {"roles": ["clientOneRoleOne", "clientOneRoleTwo"]},
+            "clientTwo": {"roles": ["clientTwoRoleOne", "clientTwoRoleTwo"]},
         }
 
-        token = get_token(None, resource_access)
+        token: Token = get_token(None, resource_access)
 
         # Act
         jwt_auth._verify_roles(token)
@@ -135,34 +95,25 @@ def test__verify_roles__missing_role_of_existing_client():
     assert exception.value.detail == "Missing role."
 
 
-def test__verify_roles__missing_role_of_missing_client():
+def test__verify_roles__missing_role_of_missing_client() -> None:
     with pytest.raises(HTTPException) as exception:
-
         # Arrange
         jwt_auth = JwtAuth(
             AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne"),
             [
                 TokenRole("clientOne", "clientOneRoleOne"),
                 TokenRole("clientTwo", "clientTwoRoleTwo"),
-                TokenRole("missingClient", "missingRole")],
-            None)
+                TokenRole("missingClient", "missingRole"),
+            ],
+            None,
+        )
 
-        resource_access = {
-            "clientOne": {
-                "roles": [
-                    "clientOneRoleOne",
-                    "clientOneRoleTwo"
-                ]
-            },
-            "clientTwo": {
-                "roles": [
-                    "clientTwoRoleOne",
-                    "clientTwoRoleTwo"
-                ]
-            }
+        resource_access: Dict[str, Dict[str, List[str]]] = {
+            "clientOne": {"roles": ["clientOneRoleOne", "clientOneRoleTwo"]},
+            "clientTwo": {"roles": ["clientTwoRoleOne", "clientTwoRoleTwo"]},
         }
 
-        token = get_token(None, resource_access)
+        token: Token = get_token(None, resource_access)
 
         # Act
         jwt_auth._verify_roles(token)
@@ -172,19 +123,20 @@ def test__verify_roles__missing_role_of_missing_client():
     assert exception.value.detail == "Missing role."
 
 
-def test__verify_roles__token_with_empty_roles():
+def test__verify_roles__token_with_empty_roles() -> None:
     with pytest.raises(HTTPException) as exception:
-
         # Arrange
         jwt_auth = JwtAuth(
             AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne"),
             [
                 TokenRole("clientOne", "clientOneRoleOne"),
                 TokenRole("clientTwo", "clientTwoRoleTwo"),
-                TokenRole("missingClient", "missingRole")],
-            None)
+                TokenRole("missingClient", "missingRole"),
+            ],
+            None,
+        )
 
-        token = get_token(None, {})
+        token: Token = get_token(None, {})
 
         # Act
         jwt_auth._verify_roles(token)
@@ -194,19 +146,20 @@ def test__verify_roles__token_with_empty_roles():
     assert exception.value.detail == "Missing role."
 
 
-def test__verify_roles__token_without_roles():
+def test__verify_roles__token_without_roles() -> None:
     with pytest.raises(HTTPException) as exception:
-
         # Arrange
         jwt_auth = JwtAuth(
             AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne"),
             [
                 TokenRole("clientOne", "clientOneRoleOne"),
                 TokenRole("clientTwo", "clientTwoRoleTwo"),
-                TokenRole("missingClient", "missingRole")],
-            None)
+                TokenRole("missingClient", "missingRole"),
+            ],
+            None,
+        )
 
-        token = get_token(None, None)
+        token: Token = get_token(None, None)
 
         # Act
         jwt_auth._verify_roles(token)

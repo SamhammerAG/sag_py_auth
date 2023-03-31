@@ -1,11 +1,12 @@
-import requests
+from typing import Any, Dict, Optional
 
+import requests
 from jose import jwt
 
-from .token_types import JwkDict, JwksDict, TokenDict
-from .models import AuthConfig
+from sag_py_auth.models import AuthConfig
+from sag_py_auth.token_types import JwkDict, JwksDict, TokenDict
 
-CACHED_JWK = None
+cached_jwk: Optional[JwkDict] = None
 
 
 def verify_and_decode_token(auth_config: AuthConfig, token_string: str) -> TokenDict:
@@ -13,22 +14,19 @@ def verify_and_decode_token(auth_config: AuthConfig, token_string: str) -> Token
 
     Returns: The token
     """
-    global CACHED_JWK
+    global cached_jwk
 
-    if not CACHED_JWK:
-        CACHED_JWK = _get_token_jwk(auth_config.issuer, token_string)
+    if not cached_jwk:
+        cached_jwk = _get_token_jwk(auth_config.issuer, token_string)
 
     # "decode" also verifies signature, issuer, audience, expiration and more
     token: TokenDict = jwt.decode(
-        token=token_string,
-        key=CACHED_JWK,
-        audience=auth_config.audience,
-        issuer=auth_config.issuer
+        token=token_string, key=cached_jwk, audience=auth_config.audience, issuer=auth_config.issuer
     )
     return token
 
 
-def _get_token_jwk(issuer: str, token_string: str) -> JwksDict:
+def _get_token_jwk(issuer: str, token_string: str) -> JwkDict:
     """Gets the key set sent from the auth provider (idp)
     that belongs to the token in the parameter. The correct
     key set is identified by key id (kid). The kid is part
@@ -37,12 +35,11 @@ def _get_token_jwk(issuer: str, token_string: str) -> JwksDict:
     Returns: The key set that belongs to the token
     """
 
-    token_header: dict = jwt.get_unverified_header(token_string)
-    token_key_id: str = token_header['kid']
+    token_header: Dict[str, Any] = jwt.get_unverified_header(token_string)
+    token_key_id: str = token_header["kid"]
 
     auth_provider_jwks: JwksDict = _get_auth_provider_jwks(issuer)
-    token_jwk: JwkDict = auth_provider_jwks[token_key_id]
-    return token_jwk
+    return auth_provider_jwks[token_key_id]
 
 
 def _get_auth_provider_jwks(issuer: str) -> JwksDict:
@@ -55,10 +52,11 @@ def _get_auth_provider_jwks(issuer: str) -> JwksDict:
 
     Returns: All key sets of the idp
     """
-    jwks_request_url = f"{issuer}/protocol/openid-connect/certs"
-    jwks_request_headers: dict = {'content-type': 'application/json'}
+    jwks_request_url: str = f"{issuer}/protocol/openid-connect/certs"
+    jwks_request_headers: Dict[str, str] = {"content-type": "application/json"}
     timeout_seconds = 30
-    jwks_response: dict = requests.get(jwks_request_url, headers=jwks_request_headers, timeout=timeout_seconds).json()
+    jwks_response: Dict[str, Any] = requests.get(
+        jwks_request_url, headers=jwks_request_headers, timeout=timeout_seconds
+    ).json()
 
-    jwks: JwksDict = {jwk["kid"]: jwk for jwk in jwks_response['keys']}
-    return jwks
+    return {jwk["kid"]: jwk for jwk in jwks_response["keys"]}

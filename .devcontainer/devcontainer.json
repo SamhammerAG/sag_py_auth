@@ -6,8 +6,9 @@
 	},
 	"customizations": {
 		"vscode": {
-			"settings": { 
+			"settings": {
 				"python.pythonPath": "/usr/local/bin/python",
+				"python.defaultInterpreterPath": "/usr/local/bin/python",
 				"python.languageServer": "Pylance",
 				"python.formatting.autopep8Path": "/usr/local/py-utils/bin/autopep8",
 				"python.formatting.blackPath": "/usr/local/py-utils/bin/black",
@@ -20,15 +21,25 @@
 				"python.linting.pylintPath": "/usr/local/py-utils/bin/pylint"
 			},
 			"extensions": [
-				"eamodio.gitlens",
 				"ms-python.python",
 				"ms-python.vscode-pylance",
+				"ms-python.flake8",
+				"ms-python.isort",
+				"usernamehw.errorlens",
+				"sourcery.sourcery",
+				"njqdev.vscode-python-typehint",
+				"littlefoxteam.vscode-python-test-adapter",
 				"njpwerner.autodocstring",
 				"redhat.vscode-yaml",
-				"sourcery.sourcery",
-				"usernamehw.errorlens",
 				"visualstudioexptteam.vscodeintellicode",
-				"ms-python.flake8"
+				"kaih2o.python-resource-monitor",
+				"geeebe.duplicate",
+				"oderwat.indent-rainbow",
+				"shardulm94.trailing-spaces",
+				"ban.spellright",
+				"ryanluker.vscode-coverage-gutters",
+				"spmeesseman.vscode-taskexplorer",
+				"eamodio.gitlens"
 			]
 		}
 	},

@@ -1,8 +1,16 @@
+from typing import Any, Dict, Optional
+
 from sag_py_auth.models import Token
+from sag_py_auth.token_types import TokenDict
 
 
-def get_token(realm_access, resource_access) -> Token:
-    token_dict = {
+def get_token(realm_access: Optional[Dict[str, Any]], resource_access: Optional[Dict[str, Any]]) -> Token:
+    token_dict: TokenDict = get_token_dict(realm_access, resource_access)
+    return Token(token_dict)
+
+
+def get_token_dict(realm_access: Optional[Dict[str, Any]], resource_access: Optional[Dict[str, Any]]) -> TokenDict:
+    token_dict: Dict[str, Any] = {
         "exp": 1679924012,
         "iat": 1679923712,
         "auth_time": 1679923711,
@@ -17,7 +25,7 @@ def get_token(realm_access, resource_access) -> Token:
         "scope": "scopeOne scopeTwo",
         "sid": "ceed04d5-b630-43db-a7b1-90065ba52fdd",
         "email_verified": False,
-        "preferred_username": "preferredUsernameValue"
+        "preferred_username": "preferredUsernameValue",
     }
 
     if realm_access is not None:
@@ -26,4 +34,4 @@ def get_token(realm_access, resource_access) -> Token:
     if resource_access is not None:
         token_dict["resource_access"] = resource_access
 
-    return Token(token_dict)
+    return token_dict

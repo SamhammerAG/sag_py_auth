@@ -1,13 +1,12 @@
+from contextvars import ContextVar
 from typing import Optional
 
-from contextvars import ContextVar
+from sag_py_auth.models import Token
 
-from .models import Token
-
-token: ContextVar[Optional[Token]] = ContextVar('token', default=None)
+token: ContextVar[Optional[Token]] = ContextVar("token", default=None)
 
 
-def get_token() -> Token:
+def get_token() -> Optional[Token]:
     """Gets the context local token. See library contextvars for details.
 
     Returns: The token
@@ -15,7 +14,6 @@ def get_token() -> Token:
     return token.get(None)
 
 
-def set_token(token_to_set: Token):
-    """Sets the context local token. See library contextvars for details.
-    """
+def set_token(token_to_set: Token) -> None:
+    """Sets the context local token. See library contextvars for details."""
     token.set(token_to_set)

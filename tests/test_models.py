@@ -1,76 +1,68 @@
+from typing import Dict, List
+
+from sag_py_auth.models import Token
+
 from .helpers import get_token
 
 
-def test__token__get_field_value__with_existing_key():
+def test__token__get_field_value__with_existing_key() -> None:
     # Arrange
-    token = get_token(None, None)
+    token: Token = get_token(None, None)
 
     # Act
-    actual = token.get_field_value("azp")
+    actual: str = token.get_field_value("azp")
 
     # Assert
     assert actual == "public-project-swagger"
 
 
-def test__token__get_field_value__with_missing_key():
+def test__token__get_field_value__with_missing_key() -> None:
     # Arrange
-    token = get_token(None, None)
+    token: Token = get_token(None, None)
 
     # Act
-    actual = token.get_field_value("missingKey")
+    actual: str = token.get_field_value("missingKey")
 
     # Assert
-    assert actual == ""
+    assert not actual
 
 
-def test__token__roles():
+def test__token__roles() -> None:
     # Arrange
-    resource_access = {
-            "clientOne": {
-                "roles": [
-                    "clientOneRoleOne",
-                    "clientOneRoleTwo"
-                ]
-            },
-            "clientTwo": {
-                "roles": [
-                    "clientTwoRoleOne",
-                    "clientTwoRoleTwo"
-                ]
-            }
-        }
+    resource_access: Dict[str, Dict[str, List[str]]] = {
+        "clientOne": {"roles": ["clientOneRoleOne", "clientOneRoleTwo"]},
+        "clientTwo": {"roles": ["clientTwoRoleOne", "clientTwoRoleTwo"]},
+    }
 
-    token = get_token(None, resource_access)
+    token: Token = get_token(None, resource_access)
 
     # Act
-    actual_client_one = token.get_roles("clientOne")
-    actual_missing_client = token.get_roles("missingClient")
+    actual_client_one: List[str] = token.get_roles("clientOne")
+    actual_missing_client: List[str] = token.get_roles("missingClient")
 
-    actual_has_one = token.has_role("clientOne", "clientOneRoleOne")
-    actual_has_missing_role = token.has_role("clientOne", "missingRole")
-    actual_has_missing_client = token.has_role("missingClient", "missingRole")
+    actual_has_one: bool = token.has_role("clientOne", "clientOneRoleOne")
+    actual_has_missing_role: bool = token.has_role("clientOne", "missingRole")
+    actual_has_missing_client: bool = token.has_role("missingClient", "missingRole")
 
     # Assert
     assert actual_client_one == ["clientOneRoleOne", "clientOneRoleTwo"]
-    assert actual_missing_client == []
+    assert not actual_missing_client
     assert actual_has_one
     assert not actual_has_missing_role
     assert not actual_has_missing_client
 
 
-def test__token__realm_roles():
+def test__token__realm_roles() -> None:
     # Arrange
-    realm_access = {
-        "roles": ["realmRoleOne", "realmRoleTwo"]
-    }
+    realm_access: Dict[str, List[str]] = {"roles": ["realmRoleOne", "realmRoleTwo"]}
 
-    token = get_token(realm_access, None)
+    token: Token = get_token(realm_access, None)
 
     # Act
-    actual_realm_roles = token.get_realm_roles()
+    actual_realm_roles: List[str] = token.get_realm_roles()
 
-    actual_has_one = token.has_realm_role("realmRoleOne")
-    actual_has_missing = token.has_realm_role("missingRole")
+    actual_has_one: bool = token.has_realm_role("realmRoleOne")
+    actual_has_missing: bool = token.has_realm_role("missingRole")
 
     # Assert
     assert actual_realm_roles == ["realmRoleOne", "realmRoleTwo"]

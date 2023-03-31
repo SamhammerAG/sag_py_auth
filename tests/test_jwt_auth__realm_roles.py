@@ -1,22 +1,25 @@
-from fastapi import HTTPException
+from typing import Dict, List, Optional
+
 import pytest
+from fastapi import HTTPException
+
 from sag_py_auth.jwt_auth import JwtAuth
-from sag_py_auth.models import AuthConfig
+from sag_py_auth.models import AuthConfig, Token
+
 from .helpers import get_token
 
 
-def test__verify_realm_roles__has_multiple():
+def test__verify_realm_roles__has_multiple() -> None:
     # Arrange
     jwt_auth = JwtAuth(
         AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne"),
         None,
-        ["realmRoleOne", "realmRoleTwo"])
+        ["realmRoleOne", "realmRoleTwo"],
+    )
 
-    realm_access = {
-        "roles": ["realmRoleOne", "realmRoleTwo"]
-    }
+    realm_access: Dict[str, List[str]] = {"roles": ["realmRoleOne", "realmRoleTwo"]}
 
-    token = get_token(realm_access, None)
+    token: Optional[Token] = get_token(realm_access, None)
 
     # Act
     try:
@@ -25,18 +28,13 @@ def test__verify_realm_roles__has_multiple():
         pytest.fail("No exception expected if the user has all realm roles")
 
 
-def test__verify_realm_roles__requires_none():
+def test__verify_realm_roles__requires_none() -> None:
     # Arrange
-    jwt_auth = JwtAuth(
-        AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne"),
-        None,
-        None)
+    jwt_auth = JwtAuth(AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne"), None, None)
 
-    realm_access = {
-        "roles": ["realmRoleOne", "realmRoleTwo"]
-    }
+    realm_access: Dict[str, List[str]] = {"roles": ["realmRoleOne", "realmRoleTwo"]}
 
-    token = get_token(realm_access, None)
+    token: Token = get_token(realm_access, None)
 
     # Act
     try:
@@ -45,18 +43,13 @@ def test__verify_realm_roles__requires_none():
         pytest.fail("No exception expected if no roles are required")
 
 
-def test__verify_realm_roles__requires_empty():
+def test__verify_realm_roles__requires_empty() -> None:
     # Arrange
-    jwt_auth = JwtAuth(
-        AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne"),
-        None,
-        [])
+    jwt_auth = JwtAuth(AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne"), None, [])
 
-    realm_access = {
-        "roles": ["realmRoleOne", "realmRoleTwo"]
-    }
+    realm_access: Dict[str, List[str]] = {"roles": ["realmRoleOne", "realmRoleTwo"]}
 
-    token = get_token(realm_access, None)
+    token: Token = get_token(realm_access, None)
 
     # Act
     try:
@@ -65,20 +58,18 @@ def test__verify_realm_roles__requires_empty():
         pytest.fail("No exception expected if no roles are required")
 
 
-def test__verify_realm_roles__missing_realm_role():
+def test__verify_realm_roles__missing_realm_role() -> None:
     with pytest.raises(HTTPException) as exception:
-
         # Arrange
         jwt_auth = JwtAuth(
             AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne"),
             None,
-            ["realmRoleOne", "realmRoleTwo"])
+            ["realmRoleOne", "realmRoleTwo"],
+        )
 
-        realm_access = {
-            "roles": ["realmRoleOne"]
-        }
+        realm_access: Dict[str, List[str]] = {"roles": ["realmRoleOne"]}
 
-        token = get_token(realm_access, None)
+        token: Token = get_token(realm_access, None)
 
         # Act
         jwt_auth._verify_realm_roles(token)
@@ -88,16 +79,16 @@ def test__verify_realm_roles__missing_realm_role():
     assert exception.value.detail == "Missing realm role."
 
 
-def test__verify_realm_roles__token_with_empty_realm_roles():
+def test__verify_realm_roles__token_with_empty_realm_roles() -> None:
     with pytest.raises(HTTPException) as exception:
-
         # Arrange
         jwt_auth = JwtAuth(
             AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne"),
             None,
-            ["realmRoleOne", "realmRoleTwo"])
+            ["realmRoleOne", "realmRoleTwo"],
+        )
 
-        token = get_token({}, None)
+        token: Token = get_token({}, None)
 
         # Act
         jwt_auth._verify_realm_roles(token)
@@ -107,16 +98,16 @@ def test__verify_realm_roles__token_with_empty_realm_roles():
     assert exception.value.detail == "Missing realm role."
 
 
-def test__verify_realm_roles__token_without_realm_roles():
+def test__verify_realm_roles__token_without_realm_roles() -> None:
     with pytest.raises(HTTPException) as exception:
-
         # Arrange
         jwt_auth = JwtAuth(
             AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne"),
             None,
-            ["realmRoleOne", "realmRoleTwo"])
+            ["realmRoleOne", "realmRoleTwo"],
+        )
 
-        token = get_token(None, None)
+        token: Token = get_token(None, None)
 
         # Act
         jwt_auth._verify_realm_roles(token)

@@ -1,5 +1,14 @@
 # sag_py_auth
 
+[![Maintainability][codeclimate-image]][codeclimate-url]
+[![Coverage Status][coveralls-image]][coveralls-url]
+[![Known Vulnerabilities](https://snyk.io/test/github/SamhammerAG/sag_py_auth/badge.svg)](https://snyk.io/test/github/SamhammerAG/sag_py_auth)
+
+[coveralls-image]:https://coveralls.io/repos/github/SamhammerAG/sag_py_auth/badge.svg?branch=master
+[coveralls-url]:https://coveralls.io/github/SamhammerAG/sag_py_auth?branch=master
+[codeclimate-image]:https://api.codeclimate.com/v1/badges/2da48e3952f9640f702f/maintainability
+[codeclimate-url]:https://codeclimate.com/github/SamhammerAG/sag_py_auth/maintainability
+
 This provides a way to secure your fastapi with keycloak jwt bearer authentication.
 
 ## What it does
