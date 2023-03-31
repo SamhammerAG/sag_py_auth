@@ -40,3 +40,4 @@ dist/
 *__pycache__/
 venv
 sag_py_auth.egg-info
+/lcov.info

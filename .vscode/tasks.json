@@ -4,7 +4,7 @@
         {
             "label": "Pytest coverage report",
             "type": "shell",
-            "command": "pytest --cov=sag_py_auth --cov-report=xml --cov-report=html tests",
+            "command": "pytest --cov=sag_py_auth --cov-report=xml --cov-report=html tests && coverage-lcov",
             "group": "test",
             "presentation": {
                 "reveal": "always",

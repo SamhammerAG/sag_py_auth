@@ -31,7 +31,8 @@ jobs:
           # exit-zero treats all errors as warnings. The GitHub editor is 120 chars wide.
           flake8 . --count --per-file-ignores='__init__.py:F401' --exit-zero --max-complexity=10 --max-line-length=120 --statistics
       - run: python -m pytest --cov=sag_py_auth --cov-report=xml tests
+      - run: coverage-lcov
       - uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: coverage.xml
+          path-to-lcov: lcov.info
