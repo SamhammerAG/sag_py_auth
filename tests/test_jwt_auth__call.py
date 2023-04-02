@@ -1,7 +1,7 @@
 from typing import List, Literal, Optional, Tuple
 
 import pytest
-from fastapi import Request
+from fastapi import HTTPException, Request
 from pytest import MonkeyPatch
 from starlette.datastructures import Headers
 
@@ -59,3 +59,66 @@ async def test__call__correctly_processes_request(monkeypatch: MonkeyPatch) -> N
     assert actual.get_field_value("_verify_roles") == "True"
     assert actual.get_field_value("_verify_realm_roles") == "True"
     assert actual.get_field_value("auth_context_set_token") == "True"
+
+
+@pytest.mark.asyncio
+async def test__call__auth_header_missing() -> None:
+    with pytest.raises(HTTPException) as exception:
+        # Arrange
+        auth_config = AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne")
+        required_roles: List[TokenRole] = [TokenRole("clientOne", "clientOneRoleOne")]
+        required_realm_roles: List[str] = ["realmRoleOne"]
+
+        jwt = JwtAuth(auth_config, required_roles, required_realm_roles)
+
+        request: Request = Request(scope={"type": "http"})
+        request._headers = Headers({})
+
+        # Act
+        await jwt.__call__(request)
+
+    # Assert
+    assert exception.value.status_code == 401
+    assert exception.value.detail == "Missing token."
+
+
+@pytest.mark.asyncio
+async def test__call__auth_header_invalid() -> None:
+    with pytest.raises(HTTPException) as exception:
+        # Arrange
+        auth_config = AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne")
+        required_roles: List[TokenRole] = [TokenRole("clientOne", "clientOneRoleOne")]
+        required_realm_roles: List[str] = ["realmRoleOne"]
+
+        jwt = JwtAuth(auth_config, required_roles, required_realm_roles)
+
+        request: Request = Request(scope={"type": "http"})
+        request._headers = Headers({"Authorization": "InvalidValue"})
+
+        # Act
+        await jwt.__call__(request)
+
+    # Assert
+    assert exception.value.status_code == 401
+    assert exception.value.detail == "Missing token."
+
+
+@pytest.mark.asyncio
+async def test__call__auth_schema_invalid() -> None:
+    with pytest.raises(HTTPException) as exception:
+        # Arrange
+        auth_config = AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne")
+        required_roles: List[TokenRole] = [TokenRole("clientOne", "clientOneRoleOne")]
+        required_realm_roles: List[str] = ["realmRoleOne"]
+
+        jwt = JwtAuth(auth_config, required_roles, required_realm_roles)
+
+        request: Request = Request(scope={"type": "http"})
+        request._headers = Headers({"Authorization": "invalidSchema tokenString"})
+
+        # Act
+        await jwt.__call__(request)
+
+    # Assert
+    assert exception.value.status_code == 401
+    assert exception.value.detail == "Missing token."

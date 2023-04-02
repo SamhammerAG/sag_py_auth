@@ -36,14 +36,17 @@ class JwtAuth(OAuth2AuthorizationCodeBearer):
             f"{auth_config.issuer}/protocol/openid-connect/auth",
             f"{auth_config.issuer}/protocol/openid-connect/token",
             scopes={},
+            auto_error=False,
         )
 
     async def __call__(self, request: Request) -> Token:  # type: ignore
         token_string: Optional[str] = await super(JwtAuth, self).__call__(request)
-        assert token_string is not None
+
+        if not token_string:
+            logger.warning("Missing auth token")
+            self._raise_auth_error(HTTP_401_UNAUTHORIZED, "Missing token.")
 
         token: Token = self._verify_and_decode_token(token_string)
-        assert token is not None  # always set if no exception
 
         self._verify_roles(token)
         self._verify_realm_roles(token)
