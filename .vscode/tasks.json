@@ -20,6 +20,16 @@
                 "reveal": "always",
                 "panel": "new"
             }
+        },
+        {
+            "label": "Build local package",
+            "type": "shell",
+            "command": "pip install build && python -m build --sdist --wheel --outdir dist/",
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
         }
     ]
 }
