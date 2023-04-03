@@ -26,7 +26,8 @@ pip install sag_py_auth
 
 First create the fast api dependency with the auth config:
 ```python
-from sag_py_auth import AuthConfig, JwtAuth, TokenRole
+from sag_py_auth.models import AuthConfig, TokenRole
+from sag_py_auth.jwt_auth import JwtAuth
 from fastapi import Depends
 
 auth_config = AuthConfig("https://authserver.com/auth/realms/projectName", "myaudience")
@@ -55,7 +56,7 @@ The Jwt call directly returns a token object that can be used to get additional 
 
 Furthermore you can access the context directly:
 ```python
-from sag_py_auth import get_token as get_token_from_context
+from sag_py_auth.auth_context import get_token as get_token_from_context
 token = get_token_from_context()
 ```
 
@@ -88,6 +89,34 @@ console_handler.addFilter(UserNameLoggingFilter())
 ```
 
 The filter provides the following two fields as soon as the user is authenticated: user_name, authorized_party
+
+### How a token has to look like
+
+```json
+{
+
+    "iss": "https://authserver.com/auth/realms/projectName",
+    "aud": ["audienceOne", "audienceTwo"],
+    "typ": "Bearer",
+    "azp": "public-project-swagger",
+    "preferred_username": "preferredUsernameValue",
+    .....
+    "realm_access": {
+        "roles": ["myRealmRoleOne"]
+    },
+    "resource_access": {
+        "my-client-one": {
+            "roles": ["a-permission-role", "user"]
+        },
+        "my-client-two": {
+            "roles": ["a-permission-role", "admin"]
+        }
+    }
+}
+```
+
+* realm_access contains the realm roles
+* resource_access contains the token roles for one or multiple clients
 
 ## How to publish
 
