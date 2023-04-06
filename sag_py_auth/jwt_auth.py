@@ -75,7 +75,7 @@ class JwtAuth(OAuth2AuthorizationCodeBearer):
         has_all_realm_roles: bool = all(realm_role in token_realm_roles for realm_role in self.required_realm_roles)
 
         if not has_all_realm_roles:
-            logger.warning("User requires realm roles '%s'", self.required_roles)
+            logger.warning("User requires realm roles '%s'", self.required_realm_roles)
             self._raise_auth_error(HTTP_403_FORBIDDEN, "Missing realm role.")
 
     def _raise_auth_error(self, status_code: int, detail: str) -> NoReturn:

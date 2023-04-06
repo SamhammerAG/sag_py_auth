@@ -74,6 +74,9 @@ class TokenRole:
         self.client: str = client
         self.role: str = role
 
+    def __repr__(self) -> str:
+        return f"{self.client}.{self.role}"
+
 
 class UserInfoLogRecord(LogRecord):
     user_name: str
