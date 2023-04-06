@@ -8,7 +8,7 @@ with open("requirements.txt", "r") as fin:
 
 setuptools.setup(
     name="sag-py-auth",
-    version="0.1.3",
+    version="0.1.4",
     description="Keycloak authentication for python projects",
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
