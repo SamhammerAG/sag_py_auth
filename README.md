@@ -20,7 +20,7 @@ This provides a way to secure your fastapi with keycloak jwt bearer authenticati
 
 ### Installation
 
-pip install sag_py_auth
+pip install sag-py-auth
 
 ### Secure your apis
 
