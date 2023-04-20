@@ -53,7 +53,7 @@ class JwtAuth(OAuth2AuthorizationCodeBearer):
         auth_context_set_token(token)
         return token
 
-    def _verify_and_decode_token(self, token_string: str) -> Token:  # type: ignore
+    def _verify_and_decode_token(self, token_string: str) -> Token:
         try:
             token_dict: TokenDict = verify_and_decode_token(self.auth_config, token_string)
             return Token(token_dict)
