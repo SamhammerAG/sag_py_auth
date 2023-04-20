@@ -7,7 +7,7 @@ with open("requirements.txt", "r") as fin:
     REQS = fin.read().splitlines()
 
 with open("requirements-dev.txt", "r") as fin:
-    REQS_DEV = fin.read().splitlines()
+    REQS_DEV = [item for item in fin.read().splitlines() if not item.endswith(".txt")]
 
 setuptools.setup(
     name="sag-py-auth",
