@@ -6,6 +6,6 @@ build
 pytest
 pytest-asyncio
 pytest-cov
-coverage-lcov
+coverage-lcov==0.2.4
 mock
 types-mock
