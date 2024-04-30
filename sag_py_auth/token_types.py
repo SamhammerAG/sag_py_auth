@@ -1,5 +1,6 @@
 """Token type definitions
 """
+
 from typing import Any, Dict
 
 JwkDict = Dict[str, str]

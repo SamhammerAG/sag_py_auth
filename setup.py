@@ -11,7 +11,7 @@ with open("requirements-dev.txt", "r") as fin:
 
 setuptools.setup(
     name="sag-py-auth",
-    version="0.1.5",
+    version="0.1.6",
     description="Keycloak authentication for python projects",
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
@@ -30,7 +30,7 @@ setuptools.setup(
     keywords="auth, fastapi, keycloak",
     packages=setuptools.find_packages(exclude=["tests"]),
     package_data={"sag_py_auth": ["py.typed"]},
-    python_requires=">=3.8",
+    python_requires=">=3.8.2",
     install_requires=REQS,
     extras_require={"dev": REQS_DEV},
     project_urls={

@@ -40,3 +40,11 @@ dist/
 venv
 sag_py_auth.egg-info
 /lcov.info
+*__pycache__/
+.DS_Store
+.env
+/coverage.xml
+.mypy_cache
+
+# Poetry
+poetry.lock
