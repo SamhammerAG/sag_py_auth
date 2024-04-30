@@ -45,3 +45,6 @@ sag_py_auth.egg-info
 .env
 /coverage.xml
 .mypy_cache
+
+# Poetry
+poetry.lock
