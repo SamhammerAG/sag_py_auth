@@ -1,6 +1,6 @@
 contextvars>=2.4
 fastapi[all]>=0.110.3
 python-jose[rsa]>=3.3.0
-requests>=2.31.0
+requests>=2.32.0
 types-requests>=2.31.0.20240406
 starlette>=0.37.2
