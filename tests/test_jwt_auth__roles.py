@@ -1,5 +1,3 @@
-from typing import Dict, List
-
 import pytest
 from fastapi import HTTPException
 
@@ -17,7 +15,7 @@ def test__verify_roles__has_multiple() -> None:
         None,
     )
 
-    resource_access: Dict[str, Dict[str, List[str]]] = {
+    resource_access: dict[str, dict[str, list[str]]] = {
         "clientOne": {"roles": ["clientOneRoleOne", "clientOneRoleTwo"]},
         "clientTwo": {"roles": ["clientTwoRoleOne", "clientTwoRoleTwo"]},
     }
@@ -35,7 +33,7 @@ def test__verify_roles__requires_none() -> None:
     # Arrange
     jwt_auth = JwtAuth(AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne"), None, None)
 
-    resource_access: Dict[str, Dict[str, List[str]]] = {
+    resource_access: dict[str, dict[str, list[str]]] = {
         "clientOne": {"roles": ["clientOneRoleOne", "clientOneRoleTwo"]},
         "clientTwo": {"roles": ["clientTwoRoleOne", "clientTwoRoleTwo"]},
     }
@@ -53,7 +51,7 @@ def test__verify_roles__requires_empty() -> None:
     # Arrange
     jwt_auth = JwtAuth(AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne"), [], None)
 
-    resource_access: Dict[str, Dict[str, List[str]]] = {
+    resource_access: dict[str, dict[str, list[str]]] = {
         "clientOne": {"roles": ["clientOneRoleOne", "clientOneRoleTwo"]},
         "clientTwo": {"roles": ["clientTwoRoleOne", "clientTwoRoleTwo"]},
     }
@@ -80,7 +78,7 @@ def test__verify_roles__missing_role_of_existing_client() -> None:
             None,
         )
 
-        resource_access: Dict[str, Dict[str, List[str]]] = {
+        resource_access: dict[str, dict[str, list[str]]] = {
             "clientOne": {"roles": ["clientOneRoleOne", "clientOneRoleTwo"]},
             "clientTwo": {"roles": ["clientTwoRoleOne", "clientTwoRoleTwo"]},
         }
@@ -108,7 +106,7 @@ def test__verify_roles__missing_role_of_missing_client() -> None:
             None,
         )
 
-        resource_access: Dict[str, Dict[str, List[str]]] = {
+        resource_access: dict[str, dict[str, list[str]]] = {
             "clientOne": {"roles": ["clientOneRoleOne", "clientOneRoleTwo"]},
             "clientTwo": {"roles": ["clientTwoRoleOne", "clientTwoRoleTwo"]},
         }

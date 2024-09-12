@@ -1,4 +1,4 @@
-from typing import List, cast
+from typing import cast
 
 import pytest
 from fastapi.openapi.models import OAuth2 as OAuth2Model
@@ -10,8 +10,8 @@ from sag_py_auth.models import AuthConfig, TokenRole
 def test__jwt_auth__init__with_valid_params__verify_flow() -> None:
     # Arrange
     auth_config = AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne")
-    required_roles: List[TokenRole] = [TokenRole("clientOne", "clientOneRoleOne")]
-    required_realm_roles: List[str] = ["realmRoleOne"]
+    required_roles: list[TokenRole] = [TokenRole("clientOne", "clientOneRoleOne")]
+    required_realm_roles: list[str] = ["realmRoleOne"]
 
     # Act
     jwt = JwtAuth(auth_config, required_roles, required_realm_roles)
@@ -35,8 +35,8 @@ def test__jwt_auth__init__with_invalid_issuer() -> None:
     with pytest.raises(Exception) as exception:
         # Arrange
         auth_config = AuthConfig("malformedUrl", "audienceOne")
-        required_roles: List[TokenRole] = [TokenRole("clientOne", "clientOneRoleOne")]
-        required_realm_roles: List[str] = ["realmRoleOne"]
+        required_roles: list[TokenRole] = [TokenRole("clientOne", "clientOneRoleOne")]
+        required_realm_roles: list[str] = ["realmRoleOne"]
 
         # Act
         JwtAuth(auth_config, required_roles, required_realm_roles)
@@ -49,8 +49,8 @@ def test__jwt_auth__init__with_empty_audience() -> None:
     with pytest.raises(Exception) as exception:
         # Arrange
         auth_config = AuthConfig("https://authserver.com/auth/realms/projectName", "")
-        required_roles: List[TokenRole] = [TokenRole("clientOne", "clientOneRoleOne")]
-        required_realm_roles: List[str] = ["realmRoleOne"]
+        required_roles: list[TokenRole] = [TokenRole("clientOne", "clientOneRoleOne")]
+        required_realm_roles: list[str] = ["realmRoleOne"]
 
         # Act
         JwtAuth(auth_config, required_roles, required_realm_roles)
@@ -63,8 +63,8 @@ def test__jwt_auth__init__with_none_audience() -> None:
     with pytest.raises(Exception) as exception:
         # Arrange
         auth_config = AuthConfig("https://authserver.com/auth/realms/projectName", None)  # type: ignore
-        required_roles: List[TokenRole] = [TokenRole("clientOne", "clientOneRoleOne")]
-        required_realm_roles: List[str] = ["realmRoleOne"]
+        required_roles: list[TokenRole] = [TokenRole("clientOne", "clientOneRoleOne")]
+        required_realm_roles: list[str] = ["realmRoleOne"]
 
         # Act
         JwtAuth(auth_config, required_roles, required_realm_roles)

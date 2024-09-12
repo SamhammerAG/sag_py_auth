@@ -1,5 +1,3 @@
-from typing import List
-
 import pytest
 from fastapi import HTTPException
 from jose import JWTError
@@ -22,8 +20,8 @@ def verify_and_decode_token_mock(auth_config: AuthConfig, token_string: str) -> 
 def test__verify_and_decode_token__with_valid_token(monkeypatch: MonkeyPatch) -> None:
     # Arrange
     auth_config = AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne")
-    required_roles: List[TokenRole] = [TokenRole("clientOne", "clientOneRoleOne")]
-    required_realm_roles: List[str] = ["realmRoleOne"]
+    required_roles: list[TokenRole] = [TokenRole("clientOne", "clientOneRoleOne")]
+    required_realm_roles: list[str] = ["realmRoleOne"]
 
     monkeypatch.setattr("sag_py_auth.jwt_auth.verify_and_decode_token", verify_and_decode_token_mock)
 
@@ -41,8 +39,8 @@ def test__verify_and_decode_token__with_invalid_token(monkeypatch: MonkeyPatch) 
     with pytest.raises(HTTPException) as exception:
         # Arrange
         auth_config = AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne")
-        required_roles: List[TokenRole] = [TokenRole("clientOne", "clientOneRoleOne")]
-        required_realm_roles: List[str] = ["realmRoleOne"]
+        required_roles: list[TokenRole] = [TokenRole("clientOne", "clientOneRoleOne")]
+        required_realm_roles: list[str] = ["realmRoleOne"]
 
         monkeypatch.setattr("sag_py_auth.jwt_auth.verify_and_decode_token", verify_and_decode_token_mock)
 

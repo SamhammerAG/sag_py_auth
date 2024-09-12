@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional
-
 import pytest
 from fastapi import HTTPException
 
@@ -17,9 +15,9 @@ def test__verify_realm_roles__has_multiple() -> None:
         ["realmRoleOne", "realmRoleTwo"],
     )
 
-    realm_access: Dict[str, List[str]] = {"roles": ["realmRoleOne", "realmRoleTwo"]}
+    realm_access: dict[str, list[str]] = {"roles": ["realmRoleOne", "realmRoleTwo"]}
 
-    token: Optional[Token] = get_token(realm_access, None)
+    token: Token | None = get_token(realm_access, None)
 
     # Act
     try:
@@ -32,7 +30,7 @@ def test__verify_realm_roles__requires_none() -> None:
     # Arrange
     jwt_auth = JwtAuth(AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne"), None, None)
 
-    realm_access: Dict[str, List[str]] = {"roles": ["realmRoleOne", "realmRoleTwo"]}
+    realm_access: dict[str, list[str]] = {"roles": ["realmRoleOne", "realmRoleTwo"]}
 
     token: Token = get_token(realm_access, None)
 
@@ -47,7 +45,7 @@ def test__verify_realm_roles__requires_empty() -> None:
     # Arrange
     jwt_auth = JwtAuth(AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne"), None, [])
 
-    realm_access: Dict[str, List[str]] = {"roles": ["realmRoleOne", "realmRoleTwo"]}
+    realm_access: dict[str, list[str]] = {"roles": ["realmRoleOne", "realmRoleTwo"]}
 
     token: Token = get_token(realm_access, None)
 
@@ -67,7 +65,7 @@ def test__verify_realm_roles__missing_realm_role() -> None:
             ["realmRoleOne", "realmRoleTwo"],
         )
 
-        realm_access: Dict[str, List[str]] = {"roles": ["realmRoleOne"]}
+        realm_access: dict[str, list[str]] = {"roles": ["realmRoleOne"]}
 
         token: Token = get_token(realm_access, None)
 

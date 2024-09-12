@@ -1,6 +1,6 @@
 import logging
 from logging import Logger
-from typing import List, NoReturn, Optional
+from typing import NoReturn
 
 from fastapi.exceptions import HTTPException
 from fastapi.security.oauth2 import OAuth2AuthorizationCodeBearer
@@ -20,8 +20,8 @@ class JwtAuth(OAuth2AuthorizationCodeBearer):
     def __init__(
         self,
         auth_config: AuthConfig,
-        required_roles: Optional[List[TokenRole]],
-        required_realm_roles: Optional[List[str]],
+        required_roles: list[TokenRole] | None,
+        required_realm_roles: list[str] | None,
     ) -> None:
         # sourcery skip: raise-specific-error
 
@@ -29,8 +29,8 @@ class JwtAuth(OAuth2AuthorizationCodeBearer):
             raise Exception("Invalid issuer or audience")
 
         self.auth_config: AuthConfig = auth_config
-        self.required_roles: List[TokenRole] = required_roles or []
-        self.required_realm_roles: List[str] = required_realm_roles or []
+        self.required_roles: list[TokenRole] = required_roles or []
+        self.required_realm_roles: list[str] = required_realm_roles or []
 
         super().__init__(
             f"{auth_config.issuer}/protocol/openid-connect/auth",
@@ -40,7 +40,7 @@ class JwtAuth(OAuth2AuthorizationCodeBearer):
         )
 
     async def __call__(self, request: Request) -> Token:  # type: ignore
-        token_string: Optional[str] = await super(JwtAuth, self).__call__(request)
+        token_string: str | None = await super().__call__(request)
 
         if not token_string:
             logger.warning("Missing auth token")
@@ -61,7 +61,7 @@ class JwtAuth(OAuth2AuthorizationCodeBearer):
             logger.warning("Invalid auth token", exc_info=True)
             self._raise_auth_error(HTTP_401_UNAUTHORIZED, "Invalid token.")
 
-    def _verify_roles(self, token: Optional[Token]) -> None:
+    def _verify_roles(self, token: Token | None) -> None:
         has_all_roles: bool = token is not None and all(
             token.has_role(requiredRole.client, requiredRole.role) for requiredRole in self.required_roles
         )
@@ -70,8 +70,8 @@ class JwtAuth(OAuth2AuthorizationCodeBearer):
             logger.warning("User requires roles '%s'", self.required_roles)
             self._raise_auth_error(HTTP_403_FORBIDDEN, "Missing role.")
 
-    def _verify_realm_roles(self, token: Optional[Token]) -> None:
-        token_realm_roles: List[str] = token.get_realm_roles() if token is not None else []
+    def _verify_realm_roles(self, token: Token | None) -> None:
+        token_realm_roles: list[str] = token.get_realm_roles() if token is not None else []
         has_all_realm_roles: bool = all(realm_role in token_realm_roles for realm_role in self.required_realm_roles)
 
         if not has_all_realm_roles:

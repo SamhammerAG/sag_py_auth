@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any
 
 from mock import Mock
 from pytest import MonkeyPatch
@@ -8,7 +8,7 @@ from sag_py_auth.token_decoder import _get_token_jwk
 from sag_py_auth.token_types import JwkDict
 
 
-def get_mock(url: str, headers: Dict[str, str], timeout: int) -> Response:
+def get_mock(url: str, headers: dict[str, str], timeout: int) -> Response:
     if (
         url == "https://authserver.com/auth/realms/projectName/protocol/openid-connect/certs"
         and headers["content-type"] == "application/json"
@@ -34,7 +34,7 @@ def get_mock(url: str, headers: Dict[str, str], timeout: int) -> Response:
     return Response()
 
 
-def get_unverified_header_mock(token_string: str) -> Dict[str, Any]:
+def get_unverified_header_mock(token_string: str) -> dict[str, Any]:
     return {"kid": "654321"} if token_string == "validTokenString" else {}
 
 

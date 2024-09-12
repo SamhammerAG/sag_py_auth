@@ -1,5 +1,4 @@
 from logging import LogRecord
-from typing import List
 
 from sag_py_auth.token_types import TokenDict
 
@@ -28,7 +27,7 @@ class Token:
         except KeyError:
             return ""
 
-    def get_roles(self, client: str) -> List[str]:
+    def get_roles(self, client: str) -> list[str]:
         """Gets all roles of a specific client
 
         Returns: The client roles
@@ -43,10 +42,10 @@ class Token:
 
         Returns: True if the client has the role
         """
-        roles: List[str] = self.get_roles(client)
+        roles: list[str] = self.get_roles(client)
         return role_name in roles
 
-    def get_realm_roles(self) -> List[str]:
+    def get_realm_roles(self) -> list[str]:
         """Gets all realm roles
 
         Returns: The realm roles
@@ -61,7 +60,7 @@ class Token:
 
         Returns: True if the token has the client role
         """
-        roles: List[str] = self.get_realm_roles()
+        roles: list[str] = self.get_realm_roles()
         return role_name in roles
 
 
