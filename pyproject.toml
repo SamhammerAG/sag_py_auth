@@ -1,12 +1,12 @@
 [tool.poetry]
 name = "sag-py-auth"
-version = "0.1.0"
+version = "1.0.0"
 description = "secure fastapi service  with keycloak jwt bearer authentication"
 authors = ["Your Name <you@example.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.8.2"
+python = "^3.12"
 contextvars = "^2.4"
 fastapi = "^0.110.3"
 requests = "^2.31.0"
