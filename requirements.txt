@@ -1,6 +1,7 @@
-contextvars>=2.4
-fastapi[all]>=0.110.3
-python-jose[rsa]>=3.3.0
-requests>=2.31.0
-types-requests>=2.31.0.20240406
-starlette>=0.37.2
+anyio>=4.4.0
+contextvars
+fastapi[all]>=0.109.1
+python-jose[rsa]
+requests
+types-requests
+starlette
