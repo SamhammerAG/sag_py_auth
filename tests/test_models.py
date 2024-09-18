@@ -1,5 +1,3 @@
-from typing import Dict, List
-
 from sag_py_auth.models import Token
 
 from .helpers import get_token
@@ -29,7 +27,7 @@ def test__token__get_field_value__with_missing_key() -> None:
 
 def test__token__roles() -> None:
     # Arrange
-    resource_access: Dict[str, Dict[str, List[str]]] = {
+    resource_access: dict[str, dict[str, list[str]]] = {
         "clientOne": {"roles": ["clientOneRoleOne", "clientOneRoleTwo"]},
         "clientTwo": {"roles": ["clientTwoRoleOne", "clientTwoRoleTwo"]},
     }
@@ -37,8 +35,8 @@ def test__token__roles() -> None:
     token: Token = get_token(None, resource_access)
 
     # Act
-    actual_client_one: List[str] = token.get_roles("clientOne")
-    actual_missing_client: List[str] = token.get_roles("missingClient")
+    actual_client_one: list[str] = token.get_roles("clientOne")
+    actual_missing_client: list[str] = token.get_roles("missingClient")
 
     actual_has_one: bool = token.has_role("clientOne", "clientOneRoleOne")
     actual_has_missing_role: bool = token.has_role("clientOne", "missingRole")
@@ -54,12 +52,12 @@ def test__token__roles() -> None:
 
 def test__token__realm_roles() -> None:
     # Arrange
-    realm_access: Dict[str, List[str]] = {"roles": ["realmRoleOne", "realmRoleTwo"]}
+    realm_access: dict[str, list[str]] = {"roles": ["realmRoleOne", "realmRoleTwo"]}
 
     token: Token = get_token(realm_access, None)
 
     # Act
-    actual_realm_roles: List[str] = token.get_realm_roles()
+    actual_realm_roles: list[str] = token.get_realm_roles()
 
     actual_has_one: bool = token.has_realm_role("realmRoleOne")
     actual_has_missing: bool = token.has_realm_role("missingRole")

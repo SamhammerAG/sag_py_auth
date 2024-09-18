@@ -1,8 +1,8 @@
 """Token type definitions
 """
 
-from typing import Any, Dict
+from typing import Any
 
-JwkDict = Dict[str, str]
-JwksDict = Dict[str, JwkDict]
-TokenDict = Dict[str, Any]
+JwkDict = dict[str, str]
+JwksDict = dict[str, JwkDict]
+TokenDict = dict[str, Any]

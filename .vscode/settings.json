@@ -20,9 +20,6 @@
         "htmlcov": true,
         "venv": true,
     },
-    "python.analysis.extraPaths": [
-        "../base"
-    ],
     "python.testing.pytestArgs": [
         "tests"
     ],

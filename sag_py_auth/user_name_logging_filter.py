@@ -1,5 +1,4 @@
 from logging import Filter, LogRecord
-from typing import Optional
 
 from sag_py_auth.auth_context import get_token
 from sag_py_auth.models import Token
@@ -12,7 +11,7 @@ class UserNameLoggingFilter(Filter):
         super().__init__(name=name)
 
     def filter(self, record: LogRecord) -> bool:
-        token: Optional[Token] = get_token()
+        token: Token | None = get_token()
         user_name: str = token.get_field_value("preferred_username") if token else ""
         authorized_party: str = token.get_field_value("azp") if token else ""
 

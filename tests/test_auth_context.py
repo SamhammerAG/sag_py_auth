@@ -1,5 +1,3 @@
-from typing import Optional
-
 from sag_py_auth.auth_context import get_token as get_token_from_context
 from sag_py_auth.auth_context import set_token as set_token_to_context
 from sag_py_auth.models import Token
@@ -13,7 +11,7 @@ from .helpers import get_token as get_test_token
 # Furthermore other tests that run the __call__ method of jwt_auth could break that one.
 def test__get_token__not_set_token() -> None:
     # Act
-    actual: Optional[Token] = get_token_from_context()
+    actual: Token | None = get_token_from_context()
 
     assert actual is None
 
@@ -24,6 +22,6 @@ def test__get_token__with_previously_set_token() -> None:
 
     # Act
     set_token_to_context(token)
-    actual: Optional[Token] = get_token_from_context()
+    actual: Token | None = get_token_from_context()
 
     assert actual == token

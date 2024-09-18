@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional
+from typing import Any
 
 import requests
 from jose import jwt
@@ -6,7 +6,7 @@ from jose import jwt
 from sag_py_auth.models import AuthConfig
 from sag_py_auth.token_types import JwkDict, JwksDict, TokenDict
 
-cached_jwk: Optional[JwkDict] = None
+cached_jwk: JwkDict | None = None
 
 
 def verify_and_decode_token(auth_config: AuthConfig, token_string: str) -> TokenDict:
@@ -35,7 +35,7 @@ def _get_token_jwk(issuer: str, token_string: str) -> JwkDict:
     Returns: The key set that belongs to the token
     """
 
-    token_header: Dict[str, Any] = jwt.get_unverified_header(token_string)
+    token_header: dict[str, Any] = jwt.get_unverified_header(token_string)
     token_key_id: str = token_header["kid"]
 
     auth_provider_jwks: JwksDict = _get_auth_provider_jwks(issuer)
@@ -53,9 +53,9 @@ def _get_auth_provider_jwks(issuer: str) -> JwksDict:
     Returns: All key sets of the idp
     """
     jwks_request_url: str = f"{issuer}/protocol/openid-connect/certs"
-    jwks_request_headers: Dict[str, str] = {"content-type": "application/json"}
+    jwks_request_headers: dict[str, str] = {"content-type": "application/json"}
     timeout_seconds = 30
-    jwks_response: Dict[str, Any] = requests.get(
+    jwks_response: dict[str, Any] = requests.get(
         jwks_request_url, headers=jwks_request_headers, timeout=timeout_seconds
     ).json()
 
