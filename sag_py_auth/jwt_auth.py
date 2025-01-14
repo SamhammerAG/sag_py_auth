@@ -1,6 +1,6 @@
 import logging
 from logging import Logger
-from typing import NoReturn
+from typing import NoReturn, Any
 
 from fastapi.exceptions import HTTPException
 from fastapi.security.oauth2 import OAuth2AuthorizationCodeBearer
@@ -10,7 +10,6 @@ from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN
 from sag_py_auth.auth_context import set_token as auth_context_set_token
 from sag_py_auth.models import AuthConfig, Token, TokenRole
 from sag_py_auth.token_decoder import verify_and_decode_token
-from sag_py_auth.token_types import TokenDict
 from sag_py_auth.utils import validate_url
 
 logger: Logger = logging.getLogger(__name__)
@@ -55,7 +54,7 @@ class JwtAuth(OAuth2AuthorizationCodeBearer):
 
     def _verify_and_decode_token(self, token_string: str) -> Token:
         try:
-            token_dict: TokenDict = verify_and_decode_token(self.auth_config, token_string)
+            token_dict: dict[str, Any] = verify_and_decode_token(self.auth_config, token_string)
             return Token(token_dict)
         except Exception:
             logger.warning("Invalid auth token", exc_info=True)

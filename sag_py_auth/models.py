@@ -1,6 +1,5 @@
 from logging import LogRecord
-
-from sag_py_auth.token_types import TokenDict
+from typing import Any
 
 
 class AuthConfig:
@@ -14,8 +13,8 @@ class AuthConfig:
 class Token:
     """The authentication token"""
 
-    def __init__(self, token_dict: TokenDict) -> None:
-        self.token_dict: TokenDict = token_dict
+    def __init__(self, token_dict: dict[str, Any]) -> None:
+        self.token_dict: dict[str, Any] = token_dict
 
     def get_field_value(self, field_name: str) -> str:
         """Gets the value of a specified token claim field

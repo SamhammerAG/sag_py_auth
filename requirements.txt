@@ -1,7 +1,11 @@
 anyio>=4.4.0
+cachetools
 contextvars
-fastapi[all]>=0.109.1
-python-jose[rsa]
-requests
+fastapi[all]
+PyJWT
+#python-jose[rsa]
+#requests
+starlette >= 0.40.0
+types-cachetools
 types-requests
-starlette
+
