@@ -9,10 +9,11 @@ readme = "README.md"
 python = "^3.12"
 anyio = "^4.4.0"
 contextvars = "*"
-fastapi = {version = "*", extras = ["all"]}
+fastapi = {version = ">=0.109.1", extras = ["all"]}
 PyJWT = "*"
-types-requests = "*"
 starlette = "*"
+types-requests = "*"
+zipp = ">=3.19.1"
 
 [tool.poetry.group.dev.dependencies]
 build = "*"
