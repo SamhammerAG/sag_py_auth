@@ -1,15 +1,14 @@
 from typing import Any
 
 from sag_py_auth.models import Token
-from sag_py_auth.token_types import TokenDict
 
 
 def get_token(realm_access: dict[str, Any] | None, resource_access: dict[str, Any] | None) -> Token:
-    token_dict: TokenDict = get_token_dict(realm_access, resource_access)
+    token_dict: dict[str, Any] = get_token_dict(realm_access, resource_access)
     return Token(token_dict)
 
 
-def get_token_dict(realm_access: dict[str, Any] | None, resource_access: dict[str, Any] | None) -> TokenDict:
+def get_token_dict(realm_access: dict[str, Any] | None, resource_access: dict[str, Any] | None) -> dict[str, Any]:
     token_dict: dict[str, Any] = {
         "exp": 1679924012,
         "iat": 1679923712,

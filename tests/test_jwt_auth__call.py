@@ -1,4 +1,4 @@
-from typing import Literal
+from typing import Literal, Any
 
 import pytest
 from fastapi import HTTPException, Request
@@ -7,14 +7,13 @@ from starlette.datastructures import Headers
 
 from sag_py_auth.jwt_auth import JwtAuth
 from sag_py_auth.models import AuthConfig, Token, TokenRole
-from sag_py_auth.token_types import TokenDict
 
 from .helpers import get_token_dict
 
 pytest_plugins: tuple[Literal["pytest_asyncio"]] = ("pytest_asyncio",)
 
 
-def verify_and_decode_token_mock(_: AuthConfig, __: str) -> TokenDict:
+def verify_and_decode_token_mock(_: AuthConfig, __: str) -> dict[str, Any]:
     return get_token_dict(None, None)
 
 

@@ -9,25 +9,26 @@ readme = "README.md"
 python = "^3.12"
 anyio = "^4.4.0"
 contextvars = "*"
-fastapi = {version = "^0.109.1", extras = ["all"]}
-requests = "*"
-types-requests = "*"
+fastapi = {version = ">=0.109.1", extras = ["all"]}
+PyJWT = "*"
 starlette = "*"
+types-requests = "*"
+zipp = ">=3.19.1"
 
 [tool.poetry.group.dev.dependencies]
-contextvars = "*"
-requests = "*"
-python-jose = {version = "*", extras = ["rsa"]}
-types-requests = "*"
-starlette = "*"
-flake8 = "*"
-mypy = "*"
 build = "*"
+cachetools = "*"
+contextvars = "*"
+starlette = ">=0.40.0"
+flake8 = "*"
+mock = "*"
+mypy = "*"
 pytest = "*"
 pytest-asyncio = "*"
 pytest-cov = "*"
-coverage-lcov = "*"
-mock = "*"
+requests = "*"
+types-cachetools = "*"
+types-requests = "*"
 types-mock = "*"
 
 [build-system]

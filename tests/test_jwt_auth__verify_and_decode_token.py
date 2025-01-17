@@ -1,20 +1,20 @@
+from typing import Any
+
 import pytest
 from fastapi import HTTPException
-from jose import JWTError
 from pytest import MonkeyPatch
 
 from sag_py_auth.jwt_auth import JwtAuth
 from sag_py_auth.models import AuthConfig, Token, TokenRole
-from sag_py_auth.token_types import TokenDict
 
 from .helpers import get_token_dict
 
 
-def verify_and_decode_token_mock(auth_config: AuthConfig, token_string: str) -> TokenDict:
+def verify_and_decode_token_mock(auth_config: AuthConfig, token_string: str) -> dict[str, Any]:
     if token_string == "validToken":
         return get_token_dict(None, None)
     else:
-        raise JWTError(f"Invalid payload string: {token_string}")
+        raise Exception(f"Invalid payload string: {token_string}")
 
 
 def test__verify_and_decode_token__with_valid_token(monkeypatch: MonkeyPatch) -> None:
@@ -30,7 +30,7 @@ def test__verify_and_decode_token__with_valid_token(monkeypatch: MonkeyPatch) ->
     # Act
     actual: Token = jwt._verify_and_decode_token("validToken")
 
-    # Asserrt
+    # Assert
     assert actual.get_field_value("typ") == "Bearer"
     assert actual.get_field_value("azp") == "public-project-swagger"
 

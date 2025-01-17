@@ -1,7 +1,10 @@
 anyio>=4.4.0
+cachetools
 contextvars
 fastapi[all]>=0.109.1
-python-jose[rsa]
-requests
+PyJWT
+starlette >= 0.40.0
+types-cachetools
 types-requests
-starlette
+zipp>=3.19.1
+

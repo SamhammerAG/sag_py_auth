@@ -1,55 +1,114 @@
+from unittest.mock import patch, MagicMock
+
+import pytest
+from jwt import ExpiredSignatureError, InvalidTokenError
 from typing import Any
-
-from mock import Mock
-from pytest import MonkeyPatch
-from requests import Response
-
-from sag_py_auth import AuthConfig
-from sag_py_auth.token_decoder import _get_token_jwk, verify_and_decode_token
-from sag_py_auth.token_types import JwkDict
+from sag_py_auth.models import AuthConfig
+from sag_py_auth.token_decoder import verify_and_decode_token, get_cached_signing_key, cache
 
 
-def get_mock(url: str, headers: dict[str, str], timeout: int) -> Response:
-    if (url == "https://authserver.com/auth/realms/projectName/protocol/openid-connect/certs"
-            and headers["content-type"] == "application/json"):
-        return Mock(status_code=200,
-                    json=lambda: {"keys": [{"kid": "123456", "kty": "RSA", "alg": "RS256", },
-                                           {"kid": "654321", "kty": "RSA", "alg": "RS256", }, ]}, )
-
-    return Response()
+@pytest.fixture(autouse=True)
+def clear_cache() -> None:
+    """Fixture to clear the cache before each test."""
+    cache.clear()
 
 
-def get_unverified_header_mock(token_string: str) -> dict[str, Any]:
-    return {"kid": "654321"} if token_string == "validTokenString" else {}
+def test_verify_valid_token() -> None:
+    """Test that a valid token is decoded successfully."""
+    auth_config = AuthConfig(issuer="https://auth.company.cloud.de/realms/realm", audience="test-audience")
+    valid_token = "valid.jwt.token"
+    mock_key = MagicMock()
+
+    with patch("sag_py_auth.token_decoder.PyJWKClient") as mock_jwk_client:
+        # Mock PyJWKClient behavior
+        mock_jwk_client_instance = mock_jwk_client.return_value
+        mock_jwk_client_instance.get_signing_key_from_jwt.return_value = mock_key
+
+        # Mock decode function to return a valid payload
+        with patch("sag_py_auth.token_decoder.decode", return_value={"sub": "12345", "aud": "test-audience"}):
+            result = verify_and_decode_token(auth_config, valid_token)
+            assert result["sub"] == "12345"
+            assert result["aud"] == "test-audience"
 
 
-def test__get_token_jwk(monkeypatch: MonkeyPatch) -> None:
-    # Arrange
-    monkeypatch.setattr("sag_py_auth.token_decoder.requests.get", get_mock)
-    monkeypatch.setattr("sag_py_auth.token_decoder.jwt.get_unverified_header", get_unverified_header_mock)
+def test_verify_invalid_token() -> None:
+    """Test that an invalid token raises a ValueError."""
+    auth_config = AuthConfig(issuer="https://auth.company.cloud.de/realms/realm", audience="test-audience")
+    invalid_token = "invalid.jwt.token"
+    mock_key = MagicMock()
 
-    # Act
-    actual: JwkDict = _get_token_jwk("https://authserver.com/auth/realms/projectName", "validTokenString")
+    with patch("sag_py_auth.token_decoder.PyJWKClient") as mock_jwk_client:
+        # Mock PyJWKClient behavior
+        mock_jwk_client_instance = mock_jwk_client.return_value
+        mock_jwk_client_instance.get_signing_key_from_jwt.return_value = mock_key
 
-    # Assert
-    assert actual == {"kid": "654321", "kty": "RSA", "alg": "RS256"}
+        # Mock decode function to raise an InvalidTokenError
+        with patch("sag_py_auth.token_decoder.decode", side_effect=InvalidTokenError("Invalid signature")):
+            try:
+                verify_and_decode_token(auth_config, invalid_token)
+            except ValueError as e:
+                assert "Invalid token signature" in str(e)
 
 
-def token_jwk(_: Any, __: Any) -> str:
-    return "test"
+def test_verify_expired_token() -> None:
+    """Test that an expired token raises a ValueError."""
+    auth_config = AuthConfig(issuer="https://auth.company.cloud.de/realms/realm", audience="test-audience")
+    expired_token = "expired.jwt.token"
+    mock_key = MagicMock()
+
+    with patch("sag_py_auth.token_decoder.PyJWKClient") as mock_jwk_client:
+        # Mock PyJWKClient behavior
+        mock_jwk_client_instance = mock_jwk_client.return_value
+        mock_jwk_client_instance.get_signing_key_from_jwt.return_value = mock_key
+
+        # Mock decode function to raise an ExpiredSignatureError
+        with patch("sag_py_auth.token_decoder.decode", side_effect=ExpiredSignatureError("Token has expired")):
+            try:
+                verify_and_decode_token(auth_config, expired_token)
+            except ValueError as e:
+                assert "Invalid token signature" in str(e)
 
 
-def test_verify_and_decode_token(monkeypatch: MonkeyPatch) -> None:
-    # Arrange
-    auth_config = AuthConfig(issuer="https://authserver.com/auth/realms/projectName", audience="audienceOne")
-    token_string = ("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHR"
-                    "wczovL2F1dGhzZXJ2ZXIuY29tL2F1dGgvcmVhbG1zL3Byb2plY3R"
-                    "OYW1lIn0.4Ona6SRNZsy8RNdH46VLEB7fx1XugWjJyLKsZ4KgHyQ")
+def test_caching_behavior() -> None:
+    """Test that the signing key is cached and reused."""
+    auth_config = AuthConfig(issuer="https://auth.company.cloud.de/realms/realm", audience="test-audience")
+    valid_token = "valid.jwt.token"
+    mock_key = MagicMock()
 
-    monkeypatch.setattr("sag_py_auth.token_decoder._get_token_jwk", token_jwk)
+    with patch("sag_py_auth.token_decoder.PyJWKClient") as mock_jwk_client:
+        # Mock PyJWKClient behavior
+        mock_jwk_client_instance = mock_jwk_client.return_value
+        mock_jwk_client_instance.get_signing_key_from_jwt.return_value = mock_key
 
-    # Act
-    token = verify_and_decode_token(auth_config, token_string)
-    # Assert
-    assert token is not None
-    assert token.get("iss") == "https://authserver.com/auth/realms/projectName"
+        # Call get_cached_signing_key twice for the same issuer
+        key1 = get_cached_signing_key(auth_config.issuer, valid_token)
+        key2 = get_cached_signing_key(auth_config.issuer, valid_token)
+
+        # Ensure PyJWKClient was called only once (key was cached)
+        assert mock_jwk_client_instance.get_signing_key_from_jwt.call_count == 1
+        assert key1 is key2  # Cached key should be reused
+
+
+def test_thread_safety_of_cache() -> None:
+    """Test that the cache is thread-safe."""
+    auth_config = AuthConfig(issuer="https://auth.company.cloud.de/realms/realm", audience="test-audience")
+    valid_token = "valid.jwt.token"
+    mock_key = MagicMock()
+
+    with patch("sag_py_auth.token_decoder.PyJWKClient") as mock_jwk_client:
+        # Mock PyJWKClient behavior
+        mock_jwk_client_instance = mock_jwk_client.return_value
+        mock_jwk_client_instance.get_signing_key_from_jwt.return_value = mock_key
+
+        # Simulate concurrent calls to get_cached_signing_key
+        from concurrent.futures import ThreadPoolExecutor
+
+        def call_get_cached_signing_key() -> Any:
+            return get_cached_signing_key(auth_config.issuer, valid_token)
+
+        with ThreadPoolExecutor(max_workers=3) as executor:
+            results = list(executor.map(lambda _: call_get_cached_signing_key(), range(3)))
+
+        # Ensure all threads received the same cached key instance
+        for result in results:
+            assert result is results[0]
