@@ -21,6 +21,7 @@ class JwtAuth(OAuth2AuthorizationCodeBearer):
         auth_config: AuthConfig,
         required_roles: list[TokenRole] | None,
         required_realm_roles: list[str] | None,
+        scheme_name: str = "auth"
     ) -> None:
         # sourcery skip: raise-specific-error
 
@@ -36,6 +37,7 @@ class JwtAuth(OAuth2AuthorizationCodeBearer):
             f"{auth_config.issuer}/protocol/openid-connect/token",
             scopes={},
             auto_error=False,
+            scheme_name=scheme_name,
         )
 
     async def __call__(self, request: Request) -> Token:  # type: ignore
