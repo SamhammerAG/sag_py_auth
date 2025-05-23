@@ -2,7 +2,7 @@ anyio>=4.9.0
 cachetools
 contextvars
 cryptography
-fastapi[all]>=0.115.12
+fastapi[standard]>=0.115.12
 PyJWT
 starlette >= 0.46.2
 types-cachetools
