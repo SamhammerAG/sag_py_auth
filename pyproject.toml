@@ -7,20 +7,20 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-anyio = "^4.4.0"
+anyio = "^4.9.0"
 contextvars = "*"
 cryptography = "*"
-fastapi = {version = ">=0.109.1", extras = ["all"]}
+fastapi = {version = ">=0.115.12", extras = ["standard"]}
 PyJWT = "*"
 starlette = "*"
 types-requests = "*"
-zipp = ">=3.19.1"
+zipp = ">=3.21.0"
 
 [tool.poetry.group.dev.dependencies]
 build = "*"
 cachetools = "*"
 contextvars = "*"
-starlette = ">=0.40.0"
+starlette = ">=0.46.2"
 flake8 = "*"
 mock = "*"
 mypy = "*"
