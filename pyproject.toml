@@ -8,18 +8,15 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.12"
 anyio = "^4.9.0"
-contextvars = "*"
-cryptography = "*"
+cachetools = ">=6.0.0"
+contextvars = ">=2.4.0"
 fastapi = {version = ">=0.115.12", extras = ["standard"]}
-PyJWT = "*"
-starlette = "*"
-types-requests = "*"
+PyJWT = "2.10.1"
+starlette = ">= 0.46.2"
 zipp = ">=3.21.0"
 
 [tool.poetry.group.dev.dependencies]
 build = "*"
-cachetools = "*"
-contextvars = "*"
 starlette = ">=0.46.2"
 flake8 = "*"
 mock = "*"
