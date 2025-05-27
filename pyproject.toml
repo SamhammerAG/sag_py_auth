@@ -26,8 +26,9 @@ pytest-asyncio = "*"
 pytest-cov = "*"
 requests = "*"
 types-cachetools = "*"
-types-requests = "*"
+types-requests = ">=2.32.0"
 types-mock = "*"
+urllib3 = ">=2.2.2"
 
 [build-system]
 requires = ["setuptools>=61.0"]
