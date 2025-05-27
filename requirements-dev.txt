@@ -8,5 +8,7 @@ mypy
 pytest
 pytest-asyncio
 pytest-cov
+types-cachetools
 types-mock
+types-requests>=2.32.0
 tomli
