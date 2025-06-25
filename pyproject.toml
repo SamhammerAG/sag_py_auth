@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sag-py-auth"
-version = "1.2.1"
+version = "1.2.2"
 description = "secure fastapi service  with keycloak jwt bearer authentication"
 authors = ["Your Name <you@example.com>"]
 readme = "README.md"

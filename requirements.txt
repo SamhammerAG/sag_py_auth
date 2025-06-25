@@ -3,5 +3,5 @@ cachetools>=6.0.0
 contextvars>=2.4.0
 fastapi[standard]>=0.115.12
 PyJWT>=2.10.1
-starlette >= 0.46.2
+starlette >= 0.46.0
 zipp>=3.21.0
