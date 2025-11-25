@@ -18,17 +18,12 @@
 			},
 			"extensions": [
 				"AykutSarac.jsoncrack-vscode",
+				"charliermarsh.ruff",
 				"eamodio.gitlens",
 				"geeebe.duplicate",
 				"Gruntfuggly.todo-tree",
-				"kaih2o.python-resource-monitor",
 				"matangover.mypy",
-				"ms-python.black-formatter",
-				"ms-python.flake8",
-				"ms-python.isort",
-				"ms-python.pylint",
 				"ms-python.python",
-				"ms-python.vscode-pylance",
 				"ms-toolsai.jupyter",
 				"njpwerner.autodocstring",
 				"njqdev.vscode-python-typehint",
@@ -38,7 +33,8 @@
 				"streetsidesoftware.code-spell-checker",
 				"tamasfe.even-better-toml",
 				"visualstudioexptteam.vscodeintellicode",
-				"yzhang.markdown-all-in-one"
+				"yzhang.markdown-all-in-one",
+				"kaih2o.python-resource-monitor"
 			]
 		}
 	},
