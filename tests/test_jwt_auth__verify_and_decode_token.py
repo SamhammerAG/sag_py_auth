@@ -10,7 +10,9 @@ from sag_py_auth.models import AuthConfig, Token, TokenRole
 from .helpers import get_token_dict
 
 
-def verify_and_decode_token_mock(auth_config: AuthConfig, token_string: str) -> dict[str, Any]:
+def verify_and_decode_token_mock(
+    auth_config: AuthConfig, token_string: str
+) -> dict[str, Any]:
     if token_string == "validToken":
         return get_token_dict(None, None)
     else:
@@ -19,11 +21,15 @@ def verify_and_decode_token_mock(auth_config: AuthConfig, token_string: str) -> 
 
 def test__verify_and_decode_token__with_valid_token(monkeypatch: MonkeyPatch) -> None:
     # Arrange
-    auth_config = AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne")
+    auth_config = AuthConfig(
+        "https://authserver.com/auth/realms/projectName", "audienceOne"
+    )
     required_roles: list[TokenRole] = [TokenRole("clientOne", "clientOneRoleOne")]
     required_realm_roles: list[str] = ["realmRoleOne"]
 
-    monkeypatch.setattr("sag_py_auth.jwt_auth.verify_and_decode_token", verify_and_decode_token_mock)
+    monkeypatch.setattr(
+        "sag_py_auth.jwt_auth.verify_and_decode_token", verify_and_decode_token_mock
+    )
 
     jwt = JwtAuth(auth_config, required_roles, required_realm_roles)
 
@@ -38,11 +44,15 @@ def test__verify_and_decode_token__with_valid_token(monkeypatch: MonkeyPatch) ->
 def test__verify_and_decode_token__with_invalid_token(monkeypatch: MonkeyPatch) -> None:
     with pytest.raises(HTTPException) as exception:
         # Arrange
-        auth_config = AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne")
+        auth_config = AuthConfig(
+            "https://authserver.com/auth/realms/projectName", "audienceOne"
+        )
         required_roles: list[TokenRole] = [TokenRole("clientOne", "clientOneRoleOne")]
         required_realm_roles: list[str] = ["realmRoleOne"]
 
-        monkeypatch.setattr("sag_py_auth.jwt_auth.verify_and_decode_token", verify_and_decode_token_mock)
+        monkeypatch.setattr(
+            "sag_py_auth.jwt_auth.verify_and_decode_token", verify_and_decode_token_mock
+        )
 
         jwt = JwtAuth(auth_config, required_roles, required_realm_roles)
 

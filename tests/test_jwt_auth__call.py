@@ -35,14 +35,24 @@ def auth_context_set_token_mock(token: Token) -> None:
 @pytest.mark.asyncio
 async def test__call__correctly_processes_request(monkeypatch: MonkeyPatch) -> None:
     # Arrange
-    auth_config = AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne")
+    auth_config = AuthConfig(
+        "https://authserver.com/auth/realms/projectName", "audienceOne"
+    )
     required_roles: list[TokenRole] = [TokenRole("clientOne", "clientOneRoleOne")]
     required_realm_roles: list[str] = ["realmRoleOne"]
 
-    monkeypatch.setattr("sag_py_auth.jwt_auth.verify_and_decode_token", verify_and_decode_token_mock)
-    monkeypatch.setattr("sag_py_auth.jwt_auth.JwtAuth._verify_roles", _verify_roles_mock)
-    monkeypatch.setattr("sag_py_auth.jwt_auth.JwtAuth._verify_realm_roles", _verify_realm_roles_mock)
-    monkeypatch.setattr("sag_py_auth.jwt_auth.auth_context_set_token", auth_context_set_token_mock)
+    monkeypatch.setattr(
+        "sag_py_auth.jwt_auth.verify_and_decode_token", verify_and_decode_token_mock
+    )
+    monkeypatch.setattr(
+        "sag_py_auth.jwt_auth.JwtAuth._verify_roles", _verify_roles_mock
+    )
+    monkeypatch.setattr(
+        "sag_py_auth.jwt_auth.JwtAuth._verify_realm_roles", _verify_realm_roles_mock
+    )
+    monkeypatch.setattr(
+        "sag_py_auth.jwt_auth.auth_context_set_token", auth_context_set_token_mock
+    )
 
     jwt = JwtAuth(auth_config, required_roles, required_realm_roles)
 
@@ -64,7 +74,9 @@ async def test__call__correctly_processes_request(monkeypatch: MonkeyPatch) -> N
 async def test__call__auth_header_missing() -> None:
     with pytest.raises(HTTPException) as exception:
         # Arrange
-        auth_config = AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne")
+        auth_config = AuthConfig(
+            "https://authserver.com/auth/realms/projectName", "audienceOne"
+        )
         required_roles: list[TokenRole] = [TokenRole("clientOne", "clientOneRoleOne")]
         required_realm_roles: list[str] = ["realmRoleOne"]
 
@@ -85,7 +97,9 @@ async def test__call__auth_header_missing() -> None:
 async def test__call__auth_header_invalid() -> None:
     with pytest.raises(HTTPException) as exception:
         # Arrange
-        auth_config = AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne")
+        auth_config = AuthConfig(
+            "https://authserver.com/auth/realms/projectName", "audienceOne"
+        )
         required_roles: list[TokenRole] = [TokenRole("clientOne", "clientOneRoleOne")]
         required_realm_roles: list[str] = ["realmRoleOne"]
 
@@ -106,7 +120,9 @@ async def test__call__auth_header_invalid() -> None:
 async def test__call__auth_schema_invalid() -> None:
     with pytest.raises(HTTPException) as exception:
         # Arrange
-        auth_config = AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne")
+        auth_config = AuthConfig(
+            "https://authserver.com/auth/realms/projectName", "audienceOne"
+        )
         required_roles: list[TokenRole] = [TokenRole("clientOne", "clientOneRoleOne")]
         required_realm_roles: list[str] = ["realmRoleOne"]
 

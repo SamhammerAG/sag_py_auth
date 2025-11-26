@@ -9,7 +9,9 @@ from sag_py_auth.models import AuthConfig, TokenRole
 
 def test__jwt_auth__init__with_valid_params__verify_flow() -> None:
     # Arrange
-    auth_config = AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne")
+    auth_config = AuthConfig(
+        "https://authserver.com/auth/realms/projectName", "audienceOne"
+    )
     required_roles: list[TokenRole] = [TokenRole("clientOne", "clientOneRoleOne")]
     required_realm_roles: list[str] = ["realmRoleOne"]
 
