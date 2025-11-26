@@ -9,12 +9,7 @@
 			"settings": {
 				"python.pythonPath": "/usr/local/bin/python",
 				"python.defaultInterpreterPath": "/usr/local/bin/python",
-				"python.languageServer": "Pylance",
-				"flake8.path": [
-					"/usr/local/py-utils/bin/bandit",
-					"/usr/local/py-utils/bin/pydocstyle"
-				],
-				"flake8.importStrategy": "fromEnvironment"
+				"python.languageServer": "Pylance"
 			},
 			"extensions": [
 				"AykutSarac.jsoncrack-vscode",
