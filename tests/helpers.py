@@ -3,12 +3,16 @@ from typing import Any
 from sag_py_auth.models import Token
 
 
-def get_token(realm_access: dict[str, Any] | None, resource_access: dict[str, Any] | None) -> Token:
+def get_token(
+    realm_access: dict[str, Any] | None, resource_access: dict[str, Any] | None
+) -> Token:
     token_dict: dict[str, Any] = get_token_dict(realm_access, resource_access)
     return Token(token_dict)
 
 
-def get_token_dict(realm_access: dict[str, Any] | None, resource_access: dict[str, Any] | None) -> dict[str, Any]:
+def get_token_dict(
+    realm_access: dict[str, Any] | None, resource_access: dict[str, Any] | None
+) -> dict[str, Any]:
     token_dict: dict[str, Any] = {
         "exp": 1679924012,
         "iat": 1679923712,

@@ -2,12 +2,12 @@
 
 build
 coverage-lcov
-flake8
 mock
 mypy
 pytest
 pytest-asyncio
 pytest-cov
+ruff
 types-cachetools
 types-mock
 types-requests>=2.32.0

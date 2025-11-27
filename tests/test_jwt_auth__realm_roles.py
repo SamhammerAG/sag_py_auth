@@ -28,7 +28,11 @@ def test__verify_realm_roles__has_multiple() -> None:
 
 def test__verify_realm_roles__requires_none() -> None:
     # Arrange
-    jwt_auth = JwtAuth(AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne"), None, None)
+    jwt_auth = JwtAuth(
+        AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne"),
+        None,
+        None,
+    )
 
     realm_access: dict[str, list[str]] = {"roles": ["realmRoleOne", "realmRoleTwo"]}
 
@@ -43,7 +47,11 @@ def test__verify_realm_roles__requires_none() -> None:
 
 def test__verify_realm_roles__requires_empty() -> None:
     # Arrange
-    jwt_auth = JwtAuth(AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne"), None, [])
+    jwt_auth = JwtAuth(
+        AuthConfig("https://authserver.com/auth/realms/projectName", "audienceOne"),
+        None,
+        [],
+    )
 
     realm_access: dict[str, list[str]] = {"roles": ["realmRoleOne", "realmRoleTwo"]}
 

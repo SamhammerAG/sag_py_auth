@@ -22,7 +22,9 @@ def test__get_field_value__with_valid_data() -> None:
     # Assert
     assert log_entry.msg == "A test message"
     assert cast(UserInfoLogRecord, log_entry).user_name == "preferredUsernameValue"
-    assert cast(UserInfoLogRecord, log_entry).authorized_party == "public-project-swagger"
+    assert (
+        cast(UserInfoLogRecord, log_entry).authorized_party == "public-project-swagger"
+    )
 
 
 def test__get_field_value__with_missing_data() -> None:

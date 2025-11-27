@@ -21,7 +21,7 @@ class JwtAuth(OAuth2AuthorizationCodeBearer):
         auth_config: AuthConfig,
         required_roles: list[TokenRole] | None,
         required_realm_roles: list[str] | None,
-        scheme_name: str = "auth"
+        scheme_name: str = "auth",
     ) -> None:
         # sourcery skip: raise-specific-error
 
@@ -56,7 +56,9 @@ class JwtAuth(OAuth2AuthorizationCodeBearer):
 
     def _verify_and_decode_token(self, token_string: str) -> Token:
         try:
-            token_dict: dict[str, Any] = verify_and_decode_token(self.auth_config, token_string)
+            token_dict: dict[str, Any] = verify_and_decode_token(
+                self.auth_config, token_string
+            )
             return Token(token_dict)
         except Exception:
             logger.warning("Invalid auth token", exc_info=True)
@@ -64,7 +66,8 @@ class JwtAuth(OAuth2AuthorizationCodeBearer):
 
     def _verify_roles(self, token: Token | None) -> None:
         has_all_roles: bool = token is not None and all(
-            token.has_role(requiredRole.client, requiredRole.role) for requiredRole in self.required_roles
+            token.has_role(requiredRole.client, requiredRole.role)
+            for requiredRole in self.required_roles
         )
 
         if not has_all_roles:
@@ -72,12 +75,20 @@ class JwtAuth(OAuth2AuthorizationCodeBearer):
             self._raise_auth_error(HTTP_403_FORBIDDEN, "Missing role.")
 
     def _verify_realm_roles(self, token: Token | None) -> None:
-        token_realm_roles: list[str] = token.get_realm_roles() if token is not None else []
-        has_all_realm_roles: bool = all(realm_role in token_realm_roles for realm_role in self.required_realm_roles)
+        token_realm_roles: list[str] = (
+            token.get_realm_roles() if token is not None else []
+        )
+        has_all_realm_roles: bool = all(
+            realm_role in token_realm_roles for realm_role in self.required_realm_roles
+        )
 
         if not has_all_realm_roles:
             logger.warning("User requires realm roles '%s'", self.required_realm_roles)
             self._raise_auth_error(HTTP_403_FORBIDDEN, "Missing realm role.")
 
     def _raise_auth_error(self, status_code: int, detail: str) -> NoReturn:
-        raise HTTPException(status_code=status_code, detail=detail, headers={"WWW-Authenticate": "Bearer"})
+        raise HTTPException(
+            status_code=status_code,
+            detail=detail,
+            headers={"WWW-Authenticate": "Bearer"},
+        )
