@@ -1,8 +1,8 @@
-anyio>=4.9.0
-cachetools>=6.0.0
+anyio>=4.12.1
+cachetools>=7.0.1
 contextvars>=2.4.0
-cryptography==45.0.5
-fastapi[standard]>=0.115.12
-PyJWT>=2.10.1
-starlette >= 0.46.0
-zipp>=3.21.0
+cryptography==46.0.5
+fastapi[standard]>=0.128.8
+PyJWT>=2.11.0
+starlette >= 0.52.1
+zipp>=3.23.0

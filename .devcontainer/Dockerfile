@@ -3,5 +3,5 @@ FROM mcr.microsoft.com/devcontainers/python:3.12-bookworm
 
 # Uninstall pre-installed formatting and linting tools
 # They would conflict with our pinned versions
-RUN pipx uninstall ruff
-RUN pipx uninstall mypy
+RUN pipx uninstall ruff || true
+RUN pipx uninstall mypy || true

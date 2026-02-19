@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sag-py-auth"
-version = "1.2.4"
+version = "1.2.5"
 description = "secure fastapi service  with keycloak jwt bearer authentication"
 authors = ["Your Name <you@example.com>"]
 readme = "README.md"
@@ -10,6 +10,7 @@ python = "^3.12"
 anyio = "^4.9.0"
 cachetools = ">=6.0.0"
 contextvars = ">=2.4.0"
+cryptography = ">=46.0.5"
 fastapi = {version = ">=0.115.12", extras = ["standard"]}
 PyJWT = "2.10.1"
 starlette = ">= 0.46.2"
