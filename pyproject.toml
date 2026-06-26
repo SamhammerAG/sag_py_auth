@@ -32,9 +32,6 @@ types-requests = ">=2.32.0"
 types-mock = "*"
 urllib3 = ">=2.2.2"
 
-[tool.coverage.run]
-omit = ["sag_py_auth/token_requester.py"]
-
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
